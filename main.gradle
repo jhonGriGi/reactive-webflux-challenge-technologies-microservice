@@ -1,3 +1,4 @@
+apply plugin: 'info.solidsoft.pitest.aggregator'
 
 allprojects {
     repositories {
@@ -11,6 +12,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'info.solidsoft.pitest'
 
     compileJava.dependsOn validateStructure
 
@@ -18,6 +20,7 @@ subprojects {
         sourceCompatibility = JavaVersion.VERSION_17
     }
 
+    //build.dependsOn 'pitest'
 
     test {
         useJUnitPlatform()
@@ -49,6 +52,23 @@ subprojects {
 
     test.finalizedBy(project.tasks.jacocoTestReport)
 
+    pitest {
+        targetClasses = ['co.com.bancolombia.*']
+        excludedClasses = []
+        excludedTestClasses = []
+        pitestVersion = '1.17.1'
+        verbose = false
+        outputFormats = ['XML', 'HTML']
+        threads = 8
+        exportLineCoverage = true
+        useClasspathFile = true
+        timestampedReports = false
+        //mutators = ['STRONGER', 'DEFAULTS']
+        fileExtensionsToFilter.addAll('xml', 'orbit')
+        junit5PluginVersion = '1.2.1'
+        failWhenNoMutations = false
+        jvmArgs = ["-XX:+AllowRedefinitionToAddDeleteMethods"]
+    }
 
     jacocoTestReport {
         dependsOn test, 'pitest'
