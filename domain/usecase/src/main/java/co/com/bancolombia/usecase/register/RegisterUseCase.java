@@ -5,8 +5,6 @@ import co.com.bancolombia.model.technology.gateways.TechnologyRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import java.util.UUID;
-
 @RequiredArgsConstructor
 public class RegisterUseCase {
     private final TechnologyRepository repository;
